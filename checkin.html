@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Formulário de Check-in</title>
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Supabase SDK v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Inicialização do Supabase -->
+  <script>
+    const SUPABASE_URL = 'https://fraarlhecaiygfmdjqcr.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyYWFybGhlY2FpeWdmbWRqcWNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIwMjU2MjIsImV4cCI6MjA2NzYwMTYyMn0.bQZqD3d3NudHvqFWyzCfNcf4SbSi5IwwmJJkrIPKbNA'; // Substitua pela sua key real
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    window.supabaseClient = supabaseClient;
+  </script>
+</head>
+
+<body class="checkin-page">
+  <main class="container">
+    <div class="logo-central">
+    <img src="Alpha_logo_fundobranco.png" alt="Logo da Empresa">
+  </div>
+    <h1 style="text-align: center;">Formulário de Check-in</h1>
+
+
+    <form id="form-checkin">
+      <label for="nome">Nome completo:</label>
+      <input type="text" id="nome" name="nome" required />
+
+      <label for="departamento">Área de atuação:</label>
+      <select id="departamento" name="departamento" required>
+        <option value="">Selecione sua área</option>
+        <option value="staff">STAFF</option>
+        <option value="iluminacao">ILUMINAÇÃO</option>
+        <option value="coordenacao">COORDENAÇÃO</option>
+        <option value="transmissao">TRANSMISSÃO</option>
+        <option value="filmagem">FILMAGEM</option>
+        <option value="conectar">CONECTAR</option>
+        <option value="intercessao">INTERCESSÃO</option>
+        <option value="escola">ESCOLA DE AVIVALISTA</option>
+        <option value="projecao">PROJEÇÃO</option>
+        <option value="louvor">LOUVOR</option>
+        <option value="comunicacao">COMUNICAÇÃO</option>
+      </select>
+
+      <label>
+        <input type="checkbox" id="chegou-atrasado" />
+        Chegou atrasado
+      </label>
+
+      <div id="motivo-atraso-div" style="display: none;">
+        <label for="motivo">Motivo do atraso:</label>
+        <textarea id="motivo" name="motivo"></textarea>
+      </div>
+
+      <button type="submit">Completar Check-in</button>
+    </form>
+
+    <div class="relogio">
+      <span id="hora-atual">--:--:--</span>
+    </div>
+  </main>
+
+  <!-- Lógica de Check-in e integração Supabase -->
+  <script src="js/script.js"></script>
+</body>
+</html>

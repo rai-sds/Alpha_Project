@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Registros de Check-in</title>
+  <link rel="stylesheet" href="../css/style.css" />
+</head>
+<body class="admin-page">
+  <div class="logo-container">
+    <img src="Alpha_logo.png" alt="Logo da Empresa">
+  </div>
+  <aside class="sidebar">
+    <nav>
+      <ul>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="records.html" class="active">Registros</a></li>
+        <li><a href="analytics.html">Analytics</a></li>
+         <li><a href="admin.html">Admin</a></li>
+      </ul>
+    </nav>
+    <footer>
+      <button onclick="logout()">Sair</button>
+    </footer>
+  </aside>
+
+  <main class="admin-records">
+    <h1>Registros de Check-in</h1>
+<br>
+    <section class="filtros">
+      <label for="filtro-departamento">Departamento:</label>
+      <select id="filtro-departamento">
+        <option value="">Todos</option>
+        <option value="staff">STAFF</option>
+        <option value="iluminacao">ILUMINAÇÃO</option>
+        <option value="coordenacao">COORDENAÇÃO</option>
+        <option value="transmissao">TRANSMISSÃO</option>
+        <option value="filmagem">FILMAGEM</option>
+        <option value="conectar">CONECTAR</option>
+        <option value="intercessao">INTERCESSÃO</option>
+        <option value="escola">ESCOLA DE AVIVALISTA</option>
+        <option value="projecao">PROJEÇÃO</option>
+        <option value="louvor">LOUVOR</option>
+        <option value="comunicacao">COMUNICAÇÃO</option>
+      </select>
+
+      <label for="filtro-nome">Nome:</label>
+      <input type="text" id="filtro-nome" placeholder="Buscar por nome" />
+
+      <label><input type="checkbox" id="filtro-atrasados" /> Apenas atrasados</label>
+
+      <button onclick="filtrarRegistros()">Filtrar</button>
+      <button onclick="exportarCSV()">Exportar para CSV</button>
+    </section>
+
+    <section class="tabela">
+      <table>
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Departamento</th>
+            <th>Data/Hora</th>
+            <th>Status</th>
+            <th>Motivo do Atraso</th>
+          </tr>
+        </thead>
+        <tbody id="tabela-registros">
+          <tr>
+            <td colspan="5">Nenhum registro encontrado com esses filtros</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="../js/script.js"></script>
+</body>
+</html>

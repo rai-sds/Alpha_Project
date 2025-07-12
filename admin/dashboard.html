@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Painel Administrativo</title>
+  <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="admin-page"> 
+  <div class="logo-container">
+    <img src="Alpha_logo.png" alt="Logo da Empresa">
+  </div>
+  <aside class="sidebar">
+    <nav>
+      <ul>
+        <li><a href="dashboard.html" class="active">Dashboard</a></li>
+        <li><a href="records.html">Registros</a></li>
+        <li><a href="analytics.html">Analytics</a></li>
+        <li><a href="admin.html">Admin</a></li>
+      </ul>
+    </nav>
+    <footer>
+      <button onclick="logout()">Sair</button>
+    </footer>
+  </aside>
+
+  <main class="admin-dashboard">
+    <h1>Resumo Geral</h1>
+<br><br><br><br>
+    <section class="stats">
+      <div class="stat-box">
+        <h2>Total de Check-ins</h2>
+        <p id="total-checkins">0</p>
+      </div>
+      <div class="stat-box">
+        <h2>Total de Atrasos</h2>
+        <p id="total-atrasos">0</p>
+      </div>
+    </section>
+
+    <section class="actions" style="margin-bottom: 40px;">
+      <button onclick="location.href='records.html'">Ver Registros</button>
+      <button onclick="baixarQR()">Imprimir QR Code</button>
+    </section>
+
+    <section class="sistema-info">
+      <h2>Informações do Sistema</h2>
+      <ul>
+        <li>Data: <span id="data-hoje"></span></li>
+        <li>Banco: Supabase</li>
+        <li>Versão: 1.1</li>
+      </ul>
+    </section>
+  </main>
+
+  <script>
+    // inicializa Supabase (caso precise usar em outros módulos)
+    const supabaseUrl    = 'https://fraarlhecaiygfmdjqcr.supabase.co';
+    const supabaseKey    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyYWFybGhlY2FpeWdmbWRqcWNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIwMjU2MjIsImV4cCI6MjA2NzYwMTYyMn0.bQZqD3d3NudHvqFWyzCfNcf4SbSi5IwwmJJkrIPKbNA';
+    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    // popula data de hoje
+    document.getElementById('data-hoje').textContent =
+      new Date().toLocaleDateString('pt-BR');
+
+    function logout() {
+      window.location.href = '../login.html';
+    }
+
+    function baixarQR() {
+      window.print();
+    }
+
+    // (opcional) buscar estatísticas no Supabase
+    // window.addEventListener('DOMContentLoaded', async () => {
+    //   const { data: checkins } = await supabaseClient
+    //     .from('checkins').select('id', { count: 'exact' });
+    //   document.getElementById('total-checkins').textContent = checkins.count;
+    //
+    //   const { data: atrasos } = await supabaseClient
+    //     .from('checkins').select('id', { count: 'exact' })
+    //     .gt('horario', 'regra_horario');
+    //   document.getElementById('total-atrasos').textContent = atrasos.count;
+    // });
+  </script>
+</body>
+</html>

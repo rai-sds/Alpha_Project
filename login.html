@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Login Administrativo</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body class="login-page">
+  <main class="container" style="max-width: 400px; text-align: center;">
+    <div class="logo-central">
+    <img src="Alpha_logo_fundobranco.png" alt="Logo da Empresa">
+  </div>
+    <h1>LOGIN ADMINISTRATIVO</h1>
+    <p class="subtitulo">ACESSE O PAINEL COM SUAS CREDENCIAIS</p>
+
+    <form id="login-form">
+      <label for="email">E-MAIL:</label>
+      <input type="email" id="email" required placeholder="admin@example.com" />
+
+      <label for="senha">SENHA:</label>
+      <input type="password" id="senha" required placeholder="••••••••" />
+
+      <button type="submit">LOGIN PARA O PAINEL</button>
+    </form>
+
+    <footer style="margin-top: 40px;">
+      <a href="index.html" class="link-back">← VOLTAR PARA O QR CODE</a>
+    </footer>
+  </main>
+
+  <script>
+    // Inicializa o Supabase
+    const supabaseUrl    = 'https://fraarlhecaiygfmdjqcr.supabase.co';
+    const supabaseKey    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyYWFybGhlY2FpeWdmbWRqcWNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIwMjU2MjIsImV4cCI6MjA2NzYwMTYyMn0.bQZqD3d3NudHvqFWyzCfNcf4SbSi5IwwmJJkrIPKbNA'; 
+    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+    // Listener de login
+    window.addEventListener('load', () => {
+      document.getElementById('login-form').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value.trim();
+        const senha = document.getElementById('senha').value.trim();
+
+        const { data, error } = await supabaseClient
+          .from('admin')
+          .select('*')
+          .eq('email', email)
+          .eq('senha', senha)
+          .single();
+
+        if (error) {
+          alert('Erro na autenticação: ' + error.message);
+        } else if (data) {
+          window.location.href = 'admin/dashboard.html';
+        } else {
+          alert('Credenciais inválidas. Tente novamente.');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

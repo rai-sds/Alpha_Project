@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Código QR para Check-in</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body class="home-page">
+  <main class="container" style="text-align: center;">
+    <div class="logo-central">
+      <img src="Alpha_logo_fundobranco.png" alt="Logo da Empresa">
+    </div>
+    <h1>Código QR para Check-in</h1>
+    <p class="subtitulo">
+      Coloque este código QR em um local visível para os voluntários escanearem ao chegar
+    </p>
+
+    <div class="qr-section">
+      <img src="assets/qrcode.png" alt="QR Code" />
+      <p><strong>URL:</strong> <span id="checkin-url">https://base-alpha.netlify.app/checkin</span></p>
+
+      <div class="buttons">
+        <button onclick="copiarURL()">Copiar URL</button>
+        <button onclick="baixarQR()">Baixar</button>
+        <button onclick="compartilhar()">Compartilhar</button>
+      </div>
+    </div>
+
+    <footer>
+      <button class="botao-login-destacado" onclick="location.href='login.html'">Login Administrativo</button>
+    </footer>
+  </main>
+
+  <script src="js/script.js"></script>
+</body>
+</html>

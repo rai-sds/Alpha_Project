@@ -1,0 +1,37 @@
+[
+  {
+    "nome": "Raí Souza dos Santos",
+    "departamento": "STAFF",
+    "dataHora": "2025-07-07T08:02:00",
+    "status": "Pontual",
+    "motivo": ""
+  },
+  {
+    "nome": "Joana Lima",
+    "departamento": "MÍDIA",
+    "dataHora": "2025-07-07T08:16:00",
+    "status": "Atrasado",
+    "motivo": "Trânsito intenso"
+  },
+  {
+    "nome": "Carlos Henrique",
+    "departamento": "SOM",
+    "dataHora": "2025-07-07T07:59:00",
+    "status": "Pontual",
+    "motivo": ""
+  },
+  {
+    "nome": "Beatriz Rocha",
+    "departamento": "INFRAESTRUTURA",
+    "dataHora": "2025-07-07T08:25:00",
+    "status": "Atrasado",
+    "motivo": "Perdeu o ônibus"
+  },
+  {
+    "nome": "Lucas Mendes",
+    "departamento": "LIMPEZA",
+    "dataHora": "2025-07-07T08:10:00",
+    "status": "Pontual",
+    "motivo": ""
+  }
+]

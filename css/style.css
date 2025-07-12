@@ -1,0 +1,316 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap');
+
+/* Reset básico */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #7ad001;
+  color: #000;
+  min-height: 100vh;
+  text-transform: uppercase;
+}
+
+/* Container e layout */
+.container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  position: relative;
+  z-index: 1;
+}
+
+h1, h2 {
+  margin-bottom: 16px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  color: #000;
+}
+
+.subtitulo {
+  font-size: 0.95rem;
+  margin-bottom: 20px;
+  color: #111;
+  font-weight: 500;
+}
+
+/* Formulários */
+form label {
+  display: block;
+  margin-top: 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  padding: 12px;
+  margin-top: 6px;
+  border: 2px solid #000;
+  border-radius: 6px;
+  background-color: #fff;
+  font-weight: 600;
+  color: #000;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Botões padrão */
+button {
+  margin-top: 20px;
+  padding: 12px 24px;
+  background-color: #000;
+  color: #7ad001;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+  text-transform: uppercase;
+}
+
+button:hover {
+  background-color: #222;
+}
+
+/* QR Code */
+.qr-section {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.qr-section img {
+  width: 220px;
+  padding: 10px;
+  background-color: #fff;
+  border-radius: 16px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+}
+
+.qr-section .buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 16px;
+  margin-bottom: 40px;
+}
+
+/* Relógio */
+.relogio {
+  text-align: center;
+  font-size: 1.4em;
+  font-weight: 600;
+  margin-top: 30px;
+}
+
+/* Sidebar admin */
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 220px;
+  height: 100%;
+  background-color: #000;
+  color: #7ad001;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+}
+
+.sidebar nav ul {
+  list-style: none;
+}
+
+.sidebar nav ul li {
+  margin-bottom: 16px;
+}
+
+.sidebar nav ul li a {
+  color: #7ad001;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.sidebar nav ul li a.active,
+.sidebar nav ul li a:hover {
+  color: #fff;
+}
+
+.sidebar footer {
+  margin-top: auto;
+}
+
+.sidebar button {
+  width: 100%;
+  background-color: #EF4444;
+  border: none;
+  color: #fff;
+}
+
+/* Painéis admin */
+main.admin-dashboard,
+main.admin-records,
+main.admin-analytics {
+  margin-left: 240px;
+  padding: 30px 40px;
+  min-height: 100vh;
+  background-color: #7ad001;
+}
+
+.stats {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-bottom: 30px;
+}
+
+.stat-box {
+  flex: 1;
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 8px;
+  text-align: center;
+  border: 2px solid #000;
+}
+
+.tabela {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  background-color: #fff;
+}
+
+thead {
+  background-color: #000;
+  color: #7ad001;
+}
+
+td, th {
+  padding: 12px;
+  border: 1px solid #000;
+}
+
+tbody tr:hover {
+  background-color: #f0f0f0;
+}
+
+/* Gráficos */
+.graficos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.grafico {
+  flex: 1;
+  min-width: 300px;
+  background: #fff;
+  padding: 20px;
+  border: 2px solid #000;
+  border-radius: 12px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.05);
+}
+
+/* Footer */
+footer {
+  text-align: center;
+}
+
+footer a {
+  text-decoration: none;
+  color: #000;
+  font-weight: 600;
+  opacity: 0.7;
+}
+
+footer a:hover {
+  opacity: 1;
+}
+
+/* Botão de login destacado */
+footer .botao-login-destacado {
+  margin-top: 60px;
+  padding: 14px 28px;
+  background-color: #fff;
+  color: #000;
+  border: 2px solid #000;
+  border-radius: 10px;
+  font-weight: 800;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+}
+
+footer .botao-login-destacado:hover {
+  background-color: #000;
+  color: #7ad001;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    flex-direction: row;
+    justify-content: space-around;
+    height: auto;
+  }
+
+  main.admin-dashboard,
+  main.admin-records,
+  main.admin-analytics {
+    margin-left: 0;
+    padding: 20px;
+  }
+
+  .stats,
+  .graficos {
+    flex-direction: column;
+  }
+}
+.logo-container {
+  position: fixed;
+  top: 20px;
+  right: 20px; /* antes era 'left: 240px' */
+  z-index: 1000;
+  padding: 10px;
+}
+
+
+.logo-container img {
+  max-height: 100px;
+  height: auto;
+}
+
+.logo-central {
+  margin-bottom: 15px;
+}
+
+.logo-central img {
+  max-height: 150px;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
