@@ -5,12 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Analytics de Check-in</title>
   <link rel="stylesheet" href="../css/style.css" />
+
+  <!-- Chart.js para os gráficos -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Supabase JS SDK v2 -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <!-- Script principal do sistema -->
+  <script src="../js/script.js" defer></script> <!-- ✅ defer garante execução correta -->
 </head>
-<body class="admin-page">
+<body class="admin-analytics"> <!-- ✅ classe ajustada para ativar o módulo -->
+
   <div class="logo-container">
     <img src="Alpha_logo.png" alt="Logo da Empresa">
   </div>
+
   <aside class="sidebar">
     <nav>
       <ul>
@@ -26,22 +34,24 @@
   </aside>
 
   <main class="admin-analytics">
-    <br><br><br>
     <h1>Relatórios de Participação</h1>
 
     <section class="filtros">
       <label for="periodo">Período:</label>
-      <select id="periodo" onchange="atualizarGraficos()">
+      <select id="periodo">
+        <option value="1">Hoje</option>
         <option value="7">Últimos 7 dias</option>
         <option value="30">Últimos 30 dias</option>
         <option value="todos">Todos os registros</option>
       </select>
+      <button id="botao-filtrar">Filtrar</button>
     </section>
 
     <section class="graficos">
       <div class="grafico">
         <h2>Presença por Departamento</h2>
         <canvas id="graficoDepartamentos"></canvas>
+        <ul id="legenda-deptos" class="legenda-chart"></ul>
       </div>
 
       <div class="grafico">
@@ -49,8 +59,12 @@
         <canvas id="graficoPontualidade"></canvas>
       </div>
     </section>
+
+    <section class="debug">
+      <h2>Debug – Contagem de Departamentos</h2>
+      <div id="debug-table"></div>
+    </section>
   </main>
 
-  <script src="../js/script.js"></script>
 </body>
 </html>

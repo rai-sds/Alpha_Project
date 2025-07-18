@@ -5,6 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Registros de Check-in</title>
   <link rel="stylesheet" href="../css/style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+  <script>
+    const SUPABASE_URL = 'https://fraarlhecaiygfmdjqcr.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyYWFybGhlY2FpeWdmbWRqcWNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIwMjU2MjIsImV4cCI6MjA2NzYwMTYyMn0.bQZqD3d3NudHvqFWyzCfNcf4SbSi5IwwmJJkrIPKbNA';
+    const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+  </script>
 </head>
 <body class="admin-page">
   <div class="logo-container">
@@ -16,7 +22,7 @@
         <li><a href="dashboard.html">Dashboard</a></li>
         <li><a href="records.html" class="active">Registros</a></li>
         <li><a href="analytics.html">Analytics</a></li>
-         <li><a href="admin.html">Admin</a></li>
+        <li><a href="admin.html">Admin</a></li>
       </ul>
     </nav>
     <footer>
@@ -26,31 +32,32 @@
 
   <main class="admin-records">
     <h1>Registros de Check-in</h1>
-<br>
+    <br>
     <section class="filtros">
       <label for="filtro-departamento">Departamento:</label>
       <select id="filtro-departamento">
-        <option value="">Todos</option>
-        <option value="staff">STAFF</option>
-        <option value="iluminacao">ILUMINAÇÃO</option>
-        <option value="coordenacao">COORDENAÇÃO</option>
-        <option value="transmissao">TRANSMISSÃO</option>
-        <option value="filmagem">FILMAGEM</option>
-        <option value="conectar">CONECTAR</option>
-        <option value="intercessao">INTERCESSÃO</option>
-        <option value="escola">ESCOLA DE AVIVALISTA</option>
-        <option value="projecao">PROJEÇÃO</option>
-        <option value="louvor">LOUVOR</option>
-        <option value="comunicacao">COMUNICAÇÃO</option>
-      </select>
+  <option value="">Todos</option>
+  <option value="STAFF">STAFF</option>
+  <option value="ILUMINAÇÃO">ILUMINAÇÃO</option>
+  <option value="COORDENAÇÃO">COORDENAÇÃO</option>
+  <option value="TRANSMISSÃO">TRANSMISSÃO</option>
+  <option value="FILMAGEM">FILMAGEM</option>
+  <option value="CONECTAR">CONECTAR</option>
+  <option value="INTERCESSÃO">INTERCESSÃO</option>
+  <option value="ESCOLA DE AVIVALISTA">ESCOLA DE AVIVALISTA</option>
+  <option value="PROJEÇÃO">PROJEÇÃO</option>
+  <option value="LOUVOR">LOUVOR</option>
+  <option value="COMUNICAÇÃO">COMUNICAÇÃO</option>
+</select>
+
 
       <label for="filtro-nome">Nome:</label>
       <input type="text" id="filtro-nome" placeholder="Buscar por nome" />
 
       <label><input type="checkbox" id="filtro-atrasados" /> Apenas atrasados</label>
 
-      <button onclick="filtrarRegistros()">Filtrar</button>
-      <button onclick="exportarCSV()">Exportar para CSV</button>
+      <button id="btn-filtrar-registros">Filtrar</button>
+      <button id="btn-exportar-registros">Exportar para CSV</button>
     </section>
 
     <section class="tabela">
@@ -66,13 +73,110 @@
         </thead>
         <tbody id="tabela-registros">
           <tr>
-            <td colspan="5">Nenhum registro encontrado com esses filtros</td>
+            <td colspan="5">Carregando...</td>
           </tr>
         </tbody>
       </table>
     </section>
   </main>
 
-  <script src="../js/script.js"></script>
+  <script>
+    const filtroNome      = document.getElementById('filtro-nome');
+    const filtroDepto     = document.getElementById('filtro-departamento');
+    const filtroAtrasados = document.getElementById('filtro-atrasados');
+    const tabelaRegistros = document.getElementById('tabela-registros');
+
+    async function carregarRegistros() {
+      const { data, error } = await supabaseClient
+        .from('checkins')
+        .select('nome_completo,area_atuacao,hora_checkin,chegou_atrasado,motivo_atraso');
+
+      if (error || !data) {
+        tabelaRegistros.innerHTML =
+          `<tr><td colspan="5">Erro ao carregar registros.</td></tr>`;
+        console.error('🚨 Supabase erro:', error);
+        return [];
+      }
+
+      return data;
+    }
+
+    function aplicarFiltros(data) {
+      const nomeFiltro = filtroNome.value.toLowerCase();
+      const departamentoFiltro = filtroDepto.value;
+      const apenasAtrasados = filtroAtrasados.checked;
+
+      return data.filter(r => {
+        const nomeMatch = r.nome_completo?.toLowerCase().includes(nomeFiltro);
+        const deptoMatch = !departamentoFiltro || r.area_atuacao === departamentoFiltro;
+        const atrasoMatch = !apenasAtrasados || r.chegou_atrasado;
+        return nomeMatch && deptoMatch && atrasoMatch;
+      });
+    }
+
+    function preencherTabela(lista) {
+      if (lista.length === 0) {
+        tabelaRegistros.innerHTML =
+          `<tr><td colspan="5">Nenhum registro encontrado com esses filtros.</td></tr>`;
+        return;
+      }
+
+      tabelaRegistros.innerHTML = lista.map(r => `
+        <tr>
+          <td>${r.nome_completo}</td>
+          <td>${r.area_atuacao}</td>
+          <td>${new Date(r.hora_checkin).toLocaleString('pt-BR')}</td>
+          <td>${r.chegou_atrasado ? 'Atrasado' : 'Pontual'}</td>
+          <td>${r.chegou_atrasado ? (r.motivo_atraso || 'Não informado') : ''}</td>
+        </tr>
+      `).join('');
+    }
+
+    document.getElementById('btn-filtrar-registros')?.addEventListener('click', async () => {
+      const registros = await carregarRegistros();
+      const filtrados = aplicarFiltros(registros);
+      preencherTabela(filtrados);
+    });
+
+    document.getElementById('btn-exportar-registros')?.addEventListener('click', async () => {
+      const registros = await carregarRegistros();
+      const filtrados = aplicarFiltros(registros);
+
+      if (filtrados.length === 0) {
+        alert('Nenhum registro encontrado para exportar.');
+        return;
+      }
+
+      const linhas = [
+        ["Nome", "Departamento", "Data/Hora", "Status", "Motivo do Atraso"],
+        ...filtrados.map(r => [
+          r.nome_completo || "",
+          r.area_atuacao || "",
+          new Date(r.hora_checkin).toLocaleString('pt-BR'),
+          r.chegou_atrasado ? "Atrasado" : "Pontual",
+          r.chegou_atrasado ? (r.motivo_atraso || "Não informado") : ""
+        ])
+      ];
+
+      const csv = linhas.map(l => l.join(';')).join('\n');
+      const blob = new Blob([csv], { type: 'text/csv' });
+      const link = document.createElement('a');
+      link.href = URL.createObjectURL(blob);
+      link.download = 'registros.csv';
+      link.click();
+
+      alert(`✅ Exportado com sucesso: ${filtrados.length} registros`);
+    });
+
+    (async () => {
+      const registros = await carregarRegistros();
+      preencherTabela(registros);
+    })();
+
+    function logout() {
+      alert('Sessão encerrada!');
+      window.location.href = '../index.html';
+    }
+  </script>
 </body>
 </html>
