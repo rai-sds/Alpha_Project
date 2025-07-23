@@ -15,23 +15,26 @@
 </head>
 <body class="admin-analytics"> <!-- ✅ classe ajustada para ativar o módulo -->
 
-  <div class="logo-container">
-    <img src="Alpha_logo.png" alt="Logo da Empresa">
-  </div>
+ 
 
   <aside class="sidebar">
-    <nav>
-      <ul>
-        <li><a href="dashboard.html">Dashboard</a></li>
-        <li><a href="records.html">Registros</a></li>
-        <li><a href="analytics.html" class="active">Analytics</a></li>
-        <li><a href="admin.html">Admin</a></li>
-      </ul>
-    </nav>
-    <footer>
-      <button onclick="logout()">Sair</button>
-    </footer>
-  </aside>
+  <div class="logo-sidebar">
+    <img src="Alpha_logo_fundopreto.png" alt="Logo da Empresa">
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="dashboard.html">Dashboard</a></li>
+      <li><a href="records.html">Registros</a></li>
+      <li><a href="analytics.html"class="active">Analytics</a></li>
+      <li><a href="admin.html" >Admin</a></li>
+    </ul>
+  </nav>
+
+  <footer>
+    <button onclick="logout()">Sair</button>
+  </footer>
+</aside>
 
   <main class="admin-analytics">
     <h1>Relatórios de Participação</h1>
@@ -59,9 +62,9 @@
         <canvas id="graficoPontualidade"></canvas>
       </div>
     </section>
-
+<br><br>
     <section class="debug">
-      <h2>Debug – Contagem de Departamentos</h2>
+      <h2>Contagem de Departamentos</h2>
       <div id="debug-table"></div>
     </section>
   </main>

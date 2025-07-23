@@ -9,23 +9,27 @@
   <script src="../js/script.js" defer></script> <!-- ✅ garante que o script rode -->
 </head>
 <body class="admin-dashboard"> <!-- ✅ corrigida aqui! -->
-  <div class="logo-container">
-    <img src="Alpha_logo.png" alt="Logo da Empresa">
-  </div>
+  
 
   <aside class="sidebar">
-    <nav>
-      <ul>
-        <li><a href="dashboard.html" class="active">Dashboard</a></li>
-        <li><a href="records.html">Registros</a></li>
-        <li><a href="analytics.html">Analytics</a></li>
-        <li><a href="admin.html">Admin</a></li>
-      </ul>
-    </nav>
-    <footer>
-      <button onclick="logout()">Sair</button>
-    </footer>
-  </aside>
+  <div class="logo-sidebar">
+    <img src="Alpha_logo_fundopreto.png" alt="Logo da Empresa">
+  </div>
+
+  <nav>
+    <ul>
+      <li><a href="dashboard.html"class="active">Dashboard</a></li>
+      <li><a href="records.html">Registros</a></li>
+      <li><a href="analytics.html">Analytics</a></li>
+      <li><a href="admin.html" >Admin</a></li>
+    </ul>
+  </nav>
+
+  <footer>
+    <button onclick="logout()">Sair</button>
+  </footer>
+</aside>
+
 
   <main class="admin-dashboard">
     <h1>Resumo Geral</h1>
@@ -42,9 +46,20 @@
       </div>
     </section>
 
+
     <section class="actions" style="margin-bottom: 40px;">
       <button onclick="location.href='records.html'">Ver Registros</button>
-      <button onclick="baixarQR()">Imprimir QR Code</button>
+      <button onclick="baixarQRCode()">Imprimir QR Code</button>
+
+<script>
+  function baixarQRCode() {
+    const link = document.createElement('a');
+    link.href = '../assets/qrcode.png'; // Caminho real do seu QR code
+    link.download = 'qrcode_alpha.png';
+    link.click();
+  }
+</script>
+
     </section>
 
     <section class="sistema-info">
@@ -52,7 +67,7 @@
       <ul>
         <li>Data: <span id="data-hoje"></span></li>
         <li>Banco: Supabase</li>
-        <li>Versão: 1.1</li>
+        <li>Versão: 1.5</li>
       </ul>
     </section>
   </main>
