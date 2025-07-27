@@ -48,6 +48,11 @@ if (formCheckin) {
       alert('Preencha nome e área de atuação.');
       return;
     }
+    if (isAtrasado && !checkboxAtraso.checked) {
+  alert('Você está fazendo check-in após 16:45. Marque que chegou atrasado.');
+  return;
+}
+
     if (atrasado && !motivo) {
       alert('Informe o motivo do atraso.');
       return;
@@ -544,4 +549,21 @@ if (document.body.classList.contains('admin-page')) {
       form.reset();
     }
   });
+}
+// Verifica se o check-in é após 16:45
+const agora = new Date();
+const limite = new Date();
+limite.setHours(16, 45, 0); // 16:45:00
+
+const isAtrasado = agora > limite;
+
+// Se for após 16:45, marcar checkbox automaticamente
+if (isAtrasado && checkboxAtraso && divMotivo) {
+  checkboxAtraso.checked = true;
+  divMotivo.style.display = 'block';
+  formCheckin.motivo.setAttribute('required', true);
+
+  // Opcional: alerta visual
+  const alertaEl = document.getElementById('alerta-atraso');
+  if (alertaEl) alertaEl.style.display = 'block';
 }
