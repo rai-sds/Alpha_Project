@@ -6,10 +6,13 @@
   <title>Administração</title>
   <link rel="stylesheet" href="../css/style.css" />
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../js/script.js" defer></script>
+
 </head>
 <body class="admin-page">
-  
-  <aside class="sidebar">
+  <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
+ <aside class="sidebar mobile-hidden">
+
   <div class="logo-sidebar">
     <img src="Alpha_logo_fundopreto.png" alt="Logo da Empresa">
   </div>
@@ -44,42 +47,6 @@
     </section>
   </main>
 
-  <script>
-    // inicializa o client Supabase
-    const supabaseUrl    = 'https://fraarlhecaiygfmdjqcr.supabase.co';
-    const supabaseKey    = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyYWFybGhlY2FpeWdmbWRqcWNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIwMjU2MjIsImV4cCI6MjA2NzYwMTYyMn0.bQZqD3d3NudHvqFWyzCfNcf4SbSi5IwwmJJkrIPKbNA';
-    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-    window.addEventListener('DOMContentLoaded', () => {
-      const form = document.getElementById('form-adicionar');
-      const feedback = document.getElementById('mensagem-feedback');
-
-      form.addEventListener('submit', async event => {
-        event.preventDefault();
-        const email = document.getElementById('novoEmail').value.trim();
-        const senha = document.getElementById('novaSenha').value.trim();
-
-        feedback.textContent = '⏳ Enviando...';
-        feedback.style.color = '#444';
-
-        const { data, error } = await supabaseClient
-          .from('admin')
-          .insert([{ email, senha }]);
-
-        if (error) {
-          feedback.textContent = '❌ Erro: ' + error.message;
-          feedback.style.color = '#d0342c';
-        } else {
-          feedback.textContent = '✅ Administrador cadastrado!';
-          feedback.style.color = '#228b22';
-          form.reset();
-        }
-      });
-    });
-
-    function logout() {
-      window.location.href = '../login.html';
-    }
-  </script>
+  
 </body>
 </html>

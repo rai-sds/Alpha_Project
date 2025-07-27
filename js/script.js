@@ -390,3 +390,158 @@ function compartilhar() {
     alert('Compartilhamento não suportado neste dispositivo.');
   }
 }
+function toggleSidebar() {
+  const sidebar = document.querySelector('.sidebar');
+  sidebar.classList.toggle('mobile-visible');
+  sidebar.classList.toggle('mobile-hidden');
+}
+
+document.addEventListener('click', function (e) {
+  const sidebar = document.querySelector('.sidebar');
+  const menuBtn = document.querySelector('.menu-toggle');
+
+  if (
+    sidebar.classList.contains('mobile-visible') &&
+    !sidebar.contains(e.target) &&
+    !menuBtn.contains(e.target)
+  ) {
+    sidebar.classList.remove('mobile-visible');
+    sidebar.classList.add('mobile-hidden');
+  }
+});
+
+
+
+// Funções
+function toggleSidebar() {
+  document.querySelector('.sidebar')?.classList.toggle('mobile-visible');
+}
+
+async function carregarRegistros() {
+  const { data, error } = await supabaseClient
+    .from('checkins')
+    .select('nome_completo,area_atuacao,hora_checkin,chegou_atrasado,motivo_atraso');
+
+  if (error || !data) {
+    tabelaRegistros.innerHTML = `<tr><td colspan="5">Erro ao carregar registros.</td></tr>`;
+    console.error('🚨 Supabase erro:', error);
+    return [];
+  }
+
+  return data;
+}
+
+function aplicarFiltros(data) {
+  const nomeFiltro = filtroNome.value.toLowerCase();
+  const departamentoFiltro = filtroDepto.value;
+  const apenasAtrasados = filtroAtrasados.checked;
+
+  return data.filter(r => {
+    const nomeMatch = r.nome_completo?.toLowerCase().includes(nomeFiltro);
+    const deptoMatch = !departamentoFiltro || r.area_atuacao === departamentoFiltro;
+    const atrasoMatch = !apenasAtrasados || r.chegou_atrasado;
+    return nomeMatch && deptoMatch && atrasoMatch;
+  });
+}
+
+function preencherTabela(lista) {
+  if (lista.length === 0) {
+    tabelaRegistros.innerHTML = `<tr><td colspan="5">Nenhum registro encontrado com esses filtros.</td></tr>`;
+    return;
+  }
+
+  tabelaRegistros.innerHTML = lista.map(r => `
+    <tr>
+      <td>${r.nome_completo}</td>
+      <td>${r.area_atuacao}</td>
+      <td>${new Date(r.hora_checkin).toLocaleString('pt-BR')}</td>
+      <td>${r.chegou_atrasado ? 'Atrasado' : 'Pontual'}</td>
+      <td>${r.chegou_atrasado ? (r.motivo_atraso || 'Não informado') : ''}</td>
+    </tr>
+  `).join('');
+}
+
+document.getElementById('btn-filtrar-registros')?.addEventListener('click', async () => {
+  const registros = await carregarRegistros();
+  const filtrados = aplicarFiltros(registros);
+  preencherTabela(filtrados);
+});
+
+document.getElementById('btn-exportar-registros')?.addEventListener('click', async () => {
+  const registros = await carregarRegistros();
+  const filtrados = aplicarFiltros(registros);
+
+  if (filtrados.length === 0) {
+    alert('Nenhum registro encontrado para exportar.');
+    return;
+  }
+
+  const linhas = [
+    ["Nome", "Departamento", "Data/Hora", "Status", "Motivo do Atraso"],
+    ...filtrados.map(r => [
+      r.nome_completo || "",
+      r.area_atuacao || "",
+      new Date(r.hora_checkin).toLocaleString('pt-BR'),
+      r.chegou_atrasado ? "Atrasado" : "Pontual",
+      r.chegou_atrasado ? (r.motivo_atraso || "Não informado") : ""
+    ])
+  ];
+
+  const csv = linhas.map(l => l.join(';')).join('\n');
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const link = document.createElement('a');
+  link.href = URL.createObjectURL(blob);
+  link.download = 'registros.csv';
+  link.click();
+});
+
+(async () => {
+  const registros = await carregarRegistros();
+  preencherTabela(registros);
+})();
+
+function logout() {
+  alert('Sessão encerrada!');
+  window.location.href = '../index.html';
+}
+if (document.body.classList.contains('admin-page')) {
+  const form = document.getElementById('form-adicionar');
+  const feedback = document.getElementById('mensagem-feedback');
+
+  form.addEventListener('submit', async event => {
+    event.preventDefault();
+
+    const email = document.getElementById('novoEmail').value.trim();
+    const senha = document.getElementById('novaSenha').value.trim();
+
+    feedback.textContent = '⏳ Enviando...';
+    feedback.style.color = '#444';
+
+    // 🔎 Verifica se e-mail já existe para evitar erro 409
+    const { data: existente } = await supabaseClient
+      .from('admin')
+      .select('email')
+      .eq('email', email)
+      .single();
+
+    if (existente) {
+      feedback.textContent = '⚠️ E-mail já cadastrado!';
+      feedback.style.color = '#d0342c';
+      return;
+    }
+
+    // 🔐 Insere novo admin
+    const { data, error } = await supabaseClient
+      .from('admin')
+      .insert([{ email, senha }]);
+
+    if (error) {
+      feedback.textContent = '❌ Erro: ' + error.message;
+      feedback.style.color = '#d0342c';
+    } else {
+      feedback.textContent = '✅ Administrador cadastrado!';
+      feedback.style.color = '#228b22';
+      form.reset();
+    }
+  });
+}

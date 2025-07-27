@@ -11,7 +11,6 @@
   --fonte: 'Poppins', sans-serif;
 }
 
-/* Reset */
 * {
   margin: 0;
   padding: 0;
@@ -19,7 +18,9 @@
   font-family: var(--fonte);
 }
 
-body {
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
   background-color: var(--preto);
   color: var(--branco);
   min-height: 100vh;
@@ -27,7 +28,6 @@ body {
   line-height: 1.6;
 }
 
-/* Container padrão */
 .container {
   max-width: 720px;
   margin: 40px auto;
@@ -37,7 +37,6 @@ body {
   box-shadow: 0 10px 25px rgba(0,0,0,0.2);
 }
 
-/* Títulos e textos */
 h1, h2 {
   font-weight: 800;
   margin-bottom: 16px;
@@ -53,7 +52,6 @@ h1, h2 {
   color: var(--cinza-claro);
 }
 
-/* Formulários */
 form label {
   display: block;
   margin-top: 14px;
@@ -78,7 +76,6 @@ textarea {
   min-height: 100px;
 }
 
-/* Botões padrão */
 button {
   margin-top: 20px;
   padding: 12px 28px;
@@ -97,7 +94,6 @@ button:hover {
   transform: scale(1.02);
 }
 
-/* Botão login */
 .botao-login-destacado {
   margin-top: 40px;
   padding: 14px 28px;
@@ -116,17 +112,19 @@ button:hover {
   color: var(--preto);
 }
 
-/* QR Code */
 .qr-section {
   margin: 30px auto;
 }
 
 .qr-section img {
-  width: 220px;
+  width: 100%;
+  max-width: 220px;
   border-radius: 12px;
   box-shadow: 0 0 12px rgba(0,0,0,0.3);
   background-color: var(--cinza-medio);
   padding: 10px;
+  margin: 0 auto;
+  display: block;
 }
 
 .qr-section .buttons {
@@ -137,7 +135,6 @@ button:hover {
   margin-top: 20px;
 }
 
-/* Filtros */
 .filtros {
   display: flex;
   flex-wrap: wrap;
@@ -154,7 +151,6 @@ button:hover {
   color: var(--branco);
 }
 
-/* Sidebar */
 .sidebar {
   position: fixed;
   top: 0;
@@ -168,9 +164,10 @@ button:hover {
   align-items: center;
   padding: 24px;
   text-align: center;
+  z-index: 1500;
+  transition: transform 0.3s ease;
 }
 
-/* Logo dentro da Sidebar */
 .logo-sidebar {
   margin-bottom: 30px;
 }
@@ -182,7 +179,6 @@ button:hover {
   display: block;
 }
 
-/* Navegação */
 .sidebar nav ul {
   list-style: none;
   padding: 0;
@@ -210,7 +206,6 @@ button:hover {
   color: var(--branco);
 }
 
-/* Botão de logout */
 .sidebar footer {
   margin-top: auto;
   width: 100%;
@@ -227,7 +222,6 @@ button:hover {
   text-align: center;
 }
 
-/* Painel principal */
 main.admin-dashboard,
 main.admin-records,
 main.admin-analytics {
@@ -237,7 +231,6 @@ main.admin-analytics {
   min-height: 100vh;
 }
 
-/* Estatísticas */
 .stats {
   display: flex;
   gap: 20px;
@@ -265,7 +258,6 @@ main.admin-analytics {
   color: var(--branco);
 }
 
-/* Tabela */
 .tabela {
   overflow-x: auto;
 }
@@ -292,7 +284,6 @@ tbody tr:hover {
   background-color: var(--cinza-medio);
 }
 
-/* Gráficos */
 .graficos {
   display: flex;
   flex-wrap: wrap;
@@ -315,7 +306,6 @@ tbody tr:hover {
   margin-bottom: 16px;
 }
 
-/* Legendas dos gráficos */
 .legenda-chart {
   list-style: none;
   padding-left: 0;
@@ -338,7 +328,6 @@ tbody tr:hover {
   display: inline-block;
 }
 
-/* Logos externas */
 .logo-container {
   position: fixed;
   top: 20px;
@@ -351,32 +340,230 @@ tbody tr:hover {
   max-height: 100px;
 }
 
-.logo-central { margin-bottom: 15px; text-align: center; }
+.logo-central {
+  margin-bottom: 15px;
+  text-align: center;
+}
 
-.logo-central img { max-height: 220px; display: block; margin: 0 auto; }
+.logo-central img {
+  max-height: 220px;
+  display: block;
+  margin: 0 auto;
+}
 
-/* Footer e links */ footer a { color: var(--verde); text-decoration: none; font-weight: 600; opacity: 0.8; }
+footer a {
+  color: var(--verde);
+  text-decoration: none;
+  font-weight: 600;
+  opacity: 0.8;
+}
 
-footer a:hover { opacity: 1; }
+footer a:hover {
+  opacity: 1;
+}
 
-/* Responsividade */ @media (max-width: 768px) { .sidebar { position: relative; width: 100%; flex-direction: row; justify-content: space-around; height: auto; }
+/* Ícone ☰ no topo */
+.menu-toggle {
+  display: none;
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  background: var(--cinza-escuro);
+  color: var(--verde);
+  border: none;
+  padding: 10px 14px;
+  font-size: 1.4rem;
+  border-radius: 8px;
+  z-index: 2000;
+  cursor: pointer;
+}
 
-main.admin-dashboard, main.admin-records, main.admin-analytics { margin-left: 0; padding: 20px; }
+/* Sidebar oculta inicialmente */
+.sidebar.mobile-hidden {
+  transform: translateX(-100%);
+  transition: transform 0.3s ease;
+}
 
-.stats, .graficos { flex-direction: column; }
+/* Sidebar visível no mobile */
+.sidebar.mobile-visible {
+  transform: translateX(0%);
+  transition: transform 0.3s ease;
+}
 
-.grafico { min-width: 100%; }
+/* Responsivo: smartphones */
+@media screen and (max-width: 768px) {
+  .menu-toggle {
+    display: block;
+  }
 
-.qr-section .buttons { flex-direction: column; gap: 12px; }
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 220px;
+    height: 100%;
+    background-color: var(--cinza-escuro);
+    z-index: 1500;
+    padding: 24px;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
 
-.sidebar nav ul { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px; }
+  .sidebar.mobile-visible {
+    transform: translateX(0%);
+  }
 
-.sidebar nav ul li { margin-bottom: 0; }
+  main.admin-dashboard,
+  main.admin-records,
+  main.admin-analytics {
+    margin-left: 0;
+    padding: 20px;
+  }
 
-.container { margin: 20px; padding: 24px; }
+  .stats,
+  .graficos {
+    flex-direction: column;
+    gap: 16px;
+  }
 
-.stat-box, .grafico, .container, .qr-section img { width: 100%; }
+  .qr-section .buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
 
-.filtros { flex-direction: column; align-items: stretch; }
+  .qr-section img {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+  }
 
-.filtros label { margin-top: 12px; width: 100%; } }
+  .filtros {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .filtros label,
+  .filtros select,
+  .filtros input,
+  .filtros button {
+    width: 100%;
+  }
+
+  .container {
+    margin: 20px;
+    padding: 20px;
+  }
+}
+
+/* Responsivo: tablets e iPads */
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+  body {
+    font-size: 15.5px;
+  }
+
+  .sidebar {
+    width: 180px;
+    padding: 20px;
+  }
+
+  main.admin-dashboard,
+  main.admin-records,
+  main.admin-analytics {
+    margin-left: 180px;
+    padding: 32px;
+  }
+
+  .logo-sidebar img {
+    max-width: 120px;
+  }
+
+  .container {
+    max-width: 95%;
+    padding: 24px;
+  }
+
+  .stats,
+  .graficos {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .stat-box,
+  .grafico,
+  .qr-section img {
+    width: 100%;
+  }
+
+  .qr-section img {
+    max-width: 200px;
+    margin: 0 auto;
+    display: block;
+  }
+
+  .qr-section .buttons {
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .filtros {
+    flex-direction: column;
+    gap: 14px;
+    align-items: stretch;
+  }
+
+  .sidebar nav ul {
+    flex-direction: column;
+    gap: 14px;
+    align-items: center;
+  }
+
+  .sidebar footer {
+    width: 100%;
+    text-align: center;
+  }
+}
+@media screen and (min-width: 769px) {
+  .sidebar {
+    transform: none !important;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
+  .sidebar.mobile-hidden,
+  .sidebar.mobile-visible {
+    transform: none !important;
+  }
+
+  main.admin-dashboard,
+  main.admin-records,
+  main.admin-analytics {
+    margin-left: 220px; /* Certo para desktop */
+  }
+}
+ .checkbox-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 14px;
+  /* mantém espaçamento geral */
+}
+
+.checkbox-group label {
+  margin: 0;             /* zera o margin-top herdado */
+  font-weight: 600;
+  color: var(--cinza-claro);
+}
+
+.checkbox-group input[type="checkbox"] {
+  width: auto;           /* não expande 100% */
+  padding: 0;            /* remove o padding de 15px */
+  margin: 0;             /* elimina margens extras */
+  transform: scale(1.2);
+  accent-color: var(--verde);
+  cursor: pointer;
+}

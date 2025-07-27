@@ -19,40 +19,41 @@
     <h1 style="text-align: center;">Formulário de Check-in</h1>
 
 
-    <form id="form-checkin">
-      <label for="nome">Nome completo:</label>
-      <input type="text" id="nome" name="nome" required />
+   <form id="form-checkin">
+  <label for="nome">Nome completo:</label>
+  <input type="text" id="nome" name="nome" required />
 
-      
-      <label for="departamento">Área de atuação:</label>
-<select id="departamento" name="departamento" required>
-  <option value="">Selecione sua área</option>
-  <option value="STAFF">STAFF</option>
-  <option value="ILUMINAÇÃO">ILUMINAÇÃO</option>
-  <option value="COORDENAÇÃO">COORDENAÇÃO</option>
-  <option value="TRANSMISSÃO">TRANSMISSÃO</option>
-  <option value="FILMAGEM">FILMAGEM</option>
-  <option value="CONECTAR">CONECTAR</option>
-  <option value="INTERCESSÃO">INTERCESSÃO</option>
-  <option value="ESCOLA DE AVIVALISTA">ESCOLA DE AVIVALISTA</option>
-  <option value="PROJEÇÃO">PROJEÇÃO</option>
-  <option value="LOUVOR">LOUVOR</option>
-  <option value="COMUNICAÇÃO">COMUNICAÇÃO</option>
-</select>
+  <label for="departamento">Área de atuação:</label>
+  <select id="departamento" name="departamento" required>
+    <option value="">Selecione sua área</option>
+    <option value="STAFF">STAFF</option>
+    <option value="ILUMINAÇÃO">ILUMINAÇÃO</option>
+    <option value="COORDENAÇÃO">COORDENAÇÃO</option>
+    <option value="TRANSMISSÃO">TRANSMISSÃO</option>
+    <option value="FILMAGEM">FILMAGEM</option>
+    <option value="CONECTAR">CONECTAR</option>
+    <option value="INTERCESSÃO">INTERCESSÃO</option>
+    <option value="ESCOLA DE AVIVALISTA">ESCOLA DE AVIVALISTA</option>
+    <option value="PROJEÇÃO">PROJEÇÃO</option>
+    <option value="LOUVOR">LOUVOR</option>
+    <option value="COMUNICAÇÃO">COMUNICAÇÃO</option>
+  </select>
+
+  <!-- Checkbox reposicionado -->
+  <div class="form-group checkbox-group">
+  <label for="chegou-atrasado">Chegou atrasado:</label>
+  <input type="checkbox" id="chegou-atrasado" name="chegou-atrasado" />
+</div>
 
 
-      <label>
-        <input type="checkbox" id="chegou-atrasado" />
-        Chegou atrasado
-      </label>
+  <div id="motivo-atraso-div" style="display: none;">
+    <label for="motivo">Motivo do atraso:</label>
+    <textarea id="motivo" name="motivo"></textarea>
+  </div>
 
-      <div id="motivo-atraso-div" style="display: none;">
-        <label for="motivo">Motivo do atraso:</label>
-        <textarea id="motivo" name="motivo"></textarea>
-      </div>
+  <button type="submit">Completar Check-in</button>
+</form>
 
-      <button type="submit">Completar Check-in</button>
-    </form>
 
     <div class="relogio">
       <span id="hora-atual">--:--:--</span>

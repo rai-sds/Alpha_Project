@@ -11,31 +11,34 @@
   <!-- Supabase JS SDK v2 -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <!-- Script principal do sistema -->
-  <script src="../js/script.js" defer></script> <!-- ✅ defer garante execução correta -->
+  <script src="../js/script.js" defer></script>
 </head>
-<body class="admin-analytics"> <!-- ✅ classe ajustada para ativar o módulo -->
+<body class="admin-analytics">
 
- 
+  <!-- Ícone de menu para dispositivos móveis -->
+  <button class="menu-toggle" onclick="toggleSidebar()">☰</button>
 
-  <aside class="sidebar">
-  <div class="logo-sidebar">
-    <img src="Alpha_logo_fundopreto.png" alt="Logo da Empresa">
-  </div>
+  <!-- Sidebar com classe de visibilidade inicial -->
+  <aside class="sidebar mobile-hidden">
+    <div class="logo-sidebar">
+      <img src="Alpha_logo_fundopreto.png" alt="Logo da Empresa">
+    </div>
 
-  <nav>
-    <ul>
-      <li><a href="dashboard.html">Dashboard</a></li>
-      <li><a href="records.html">Registros</a></li>
-      <li><a href="analytics.html"class="active">Analytics</a></li>
-      <li><a href="admin.html" >Admin</a></li>
-    </ul>
-  </nav>
+    <nav>
+      <ul>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="records.html">Registros</a></li>
+        <li><a href="analytics.html" class="active">Analytics</a></li>
+        <li><a href="admin.html">Admin</a></li>
+      </ul>
+    </nav>
 
-  <footer>
-    <button onclick="logout()">Sair</button>
-  </footer>
-</aside>
+    <footer>
+      <button onclick="logout()">Sair</button>
+    </footer>
+  </aside>
 
+  <!-- Painel principal -->
   <main class="admin-analytics">
     <h1>Relatórios de Participação</h1>
 
@@ -62,7 +65,9 @@
         <canvas id="graficoPontualidade"></canvas>
       </div>
     </section>
-<br><br>
+
+    <br><br>
+
     <section class="debug">
       <h2>Contagem de Departamentos</h2>
       <div id="debug-table"></div>
