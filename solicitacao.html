@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Solicitação de Acesso Administrativo</title>
+  <link rel="stylesheet" href="css/style.css" />
+
+  <!-- Carrega o UMD bundle do Supabase primeiro, sem defer -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+</head>
+
+<body class="login-page">
+  <main class="container" style="max-width: 400px; text-align: center;">
+    <div class="logo-central">
+      <img src="Alpha_logo_fundopreto.png" alt="Logo da Empresa">
+    </div>
+
+    <h1>SOLICITAR ACESSO ADMINISTRATIVO</h1>
+    <p class="subtitulo">Insira suas credenciais para solicitar acesso</p>
+
+    <form id="solicitacao-form">
+      <label for="email">E-MAIL:</label>
+      <input
+        type="email"
+        id="email"
+        required
+        placeholder="usuario@exemplo.com"
+      />
+
+      <label for="senha">SENHA:</label>
+      <input
+        type="password"
+        id="senha"
+        required
+        placeholder="••••••••"
+      />
+
+      <button type="submit" style="margin-top: 20px;">
+        ENVIAR SOLICITAÇÃO
+      </button>
+    </form>
+
+    <p id="mensagem-feedback" style="margin-top: 16px; font-size: 0.95rem;"></p>
+
+    <footer style="margin-top: 40px;">
+      <a href="login.html" class="link-back">← VOLTAR PARA O LOGIN</a>
+    </footer>
+  </main>
+
+  <!-- Script de inicialização do Supabase e manipulação do formulário -->
+<script>
+  // Configurações do Supabase
+  const supabaseUrl = 'https://fraarlhecaiygfmdjqcr.supabase.co';
+  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyYWFybGhlY2FpeWdmbWRqcWNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIwMjU2MjIsImV4cCI6MjA2NzYwMTYyMn0.bQZqD3d3NudHvqFWyzCfNcf4SbSi5IwwmJJkrIPKbNA';
+
+  const supabaseClient = supabase.createClient(supabaseUrl, supabaseKey);
+
+  window.addEventListener('load', () => {
+    const form = document.getElementById('solicitacao-form');
+    const feedback = document.getElementById('mensagem-feedback');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      feedback.textContent = '';
+
+      const email = form.email.value.trim();
+      const senha = form.senha.value.trim();
+
+      // Use "password_hash" em vez de "senha"
+      const payload = [{
+        email,
+        senha: senha,
+        status: 'pending',
+        criado_em: new Date().toISOString(),
+      }];
+
+      const { data, error } = await supabaseClient
+        .from('admin_requests')
+        .insert(payload);
+
+      console.log('Insert response:', { data, error });
+      if (error) {
+        console.log('Error details:', error.details);
+        console.log('Error hint   :', error.hint);
+        feedback.textContent = '❌ Erro ao enviar: ' + error.message;
+        feedback.style.color = '#d0342c';
+      } else {
+        feedback.textContent = '✅ Solicitação enviada com sucesso! Aguarde aprovação.';
+        feedback.style.color = '#228b22';
+        form.reset();
+      }
+    });
+  });
+</script>
+</body>
+
+</html>

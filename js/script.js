@@ -4,6 +4,7 @@
 const SUPABASE_URL = 'https://fraarlhecaiygfmdjqcr.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZyYWFybGhlY2FpeWdmbWRqcWNyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTIwMjU2MjIsImV4cCI6MjA2NzYwMTYyMn0.bQZqD3d3NudHvqFWyzCfNcf4SbSi5IwwmJJkrIPKbNA'; // sua chave real
 const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+console.log('✅ supabaseClient criado:', supabaseClient);
 
 // 1) Logout global
 window.logout = () => {
@@ -500,56 +501,19 @@ document.getElementById('btn-exportar-registros')?.addEventListener('click', asy
   link.click();
 });
 
-(async () => {
-  const registros = await carregarRegistros();
-  preencherTabela(registros);
-})();
+if (document.getElementById('tabela-registros')) {
+  (async () => {
+    const registros = await carregarRegistros();
+    preencherTabela(registros);
+  })();
+}
+
 
 function logout() {
   alert('Sessão encerrada!');
   window.location.href = '../index.html';
 }
-if (document.body.classList.contains('admin-page')) {
-  const form = document.getElementById('form-adicionar');
-  const feedback = document.getElementById('mensagem-feedback');
 
-  form.addEventListener('submit', async event => {
-    event.preventDefault();
-
-    const email = document.getElementById('novoEmail').value.trim();
-    const senha = document.getElementById('novaSenha').value.trim();
-
-    feedback.textContent = '⏳ Enviando...';
-    feedback.style.color = '#444';
-
-    // 🔎 Verifica se e-mail já existe para evitar erro 409
-    const { data: existente } = await supabaseClient
-      .from('admin')
-      .select('email')
-      .eq('email', email)
-      .single();
-
-    if (existente) {
-      feedback.textContent = '⚠️ E-mail já cadastrado!';
-      feedback.style.color = '#d0342c';
-      return;
-    }
-
-    // 🔐 Insere novo admin
-    const { data, error } = await supabaseClient
-      .from('admin')
-      .insert([{ email, senha }]);
-
-    if (error) {
-      feedback.textContent = '❌ Erro: ' + error.message;
-      feedback.style.color = '#d0342c';
-    } else {
-      feedback.textContent = '✅ Administrador cadastrado!';
-      feedback.style.color = '#228b22';
-      form.reset();
-    }
-  });
-}
 // Verifica se o check-in é após 16:45
 const agora = new Date();
 const limite = new Date();
@@ -566,4 +530,106 @@ if (isAtrasado && checkboxAtraso && divMotivo) {
   // Opcional: alerta visual
   const alertaEl = document.getElementById('alerta-atraso');
   if (alertaEl) alertaEl.style.display = 'block';
+}
+if (document.body.classList.contains('admin-page')) {
+  const lista    = document.getElementById('lista-solicitacoes');
+  const feedback = document.getElementById('mensagem-feedback');
+  let   pedidos  = [];
+
+  async function carregarPedidos() {
+    const { data, error } = await supabaseClient
+      .from('admin_requests')
+      .select('*')
+      .eq('status', 'pending')
+      .order('criado_em', { ascending: false });
+
+    console.log('📝 admin_requests pendentes:', data, error);
+
+    if (error) {
+      feedback.textContent = '❌ Erro ao carregar: ' + error.message;
+      feedback.style.color = '#d0342c';
+      return;
+    }
+
+    pedidos = data;
+
+    if (data.length === 0) {
+      lista.innerHTML = '<li>Nenhuma solicitação pendente</li>';
+      return;
+    }
+
+    lista.innerHTML = data
+      .map(p => `
+        <li data-id="${p.id}">
+          <span>${p.email}</span>
+          <button class="btn-approve">Aprovar</button>
+          <button class="btn-reject">Rejeitar</button>
+        </li>
+      `)
+      .join('');
+
+    lista.querySelectorAll('.btn-approve').forEach(btn =>
+      btn.addEventListener('click', () =>
+        decidirPedido(btn.closest('li').dataset.id, 'approved')
+      )
+    );
+
+    lista.querySelectorAll('.btn-reject').forEach(btn =>
+      btn.addEventListener('click', () =>
+        decidirPedido(btn.closest('li').dataset.id, 'rejected')
+      )
+    );
+  }
+
+  async function decidirPedido(id, acao) {
+    feedback.textContent = 'Processando…';
+    feedback.style.color = '#444';
+
+    const { error: upErr } = await supabaseClient
+      .from('admin_requests')
+      .update({
+        status: acao,
+        processed_at: new Date().toISOString(),
+        processed_by: null
+      })
+      .eq('id', id);
+
+    if (upErr) {
+      feedback.textContent = '❌ Erro ao atualizar: ' + upErr.message;
+      feedback.style.color = '#d0342c';
+      return;
+    }
+
+    if (acao === 'approved') {
+      const pedido = pedidos.find(p => p.id === id);
+
+      if (!pedido || !pedido.email || !pedido.senha) {
+        feedback.textContent = '❌ Dados incompletos para criar admin.';
+        feedback.style.color = '#d0342c';
+        return;
+      }
+
+      const { error: inErr } = await supabaseClient
+        .from('admin')
+        .insert([{
+          email: pedido.email,
+          senha: pedido.senha,
+          criado_em: new Date().toISOString(),
+        }]);
+
+      if (inErr) {
+        feedback.textContent = '❌ Erro ao criar admin: ' + inErr.message;
+        feedback.style.color = '#d0342c';
+        return;
+      }
+    }
+
+    await carregarPedidos();
+    feedback.textContent = acao === 'approved'
+      ? '✅ Administrador aprovado!'
+      : '✅ Solicitação rejeitada.';
+    feedback.style.color = acao === 'approved' ? '#228b22' : '#444';
+  }
+
+  carregarPedidos();
 }
